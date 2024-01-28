@@ -1,0 +1,108 @@
+.landing-page {
+    box-sizing: border-box;
+    width: 100vw;
+    background-color: black;
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .center {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .header {
+    box-sizing: border-box;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 100px;
+    transition: font-size 0.3s ease, background 0.3s ease, color 0.3s ease; /* Add transitions for smooth effect */
+    margin: 0;
+    background: linear-gradient(45deg, #0bbbbb, #aa5612);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  .title.hovered {
+    font-size: 120px; /* Increase the font size on hover */
+    background: linear-gradient(45deg, #4CAF50, #008CBA);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  .header p {
+    box-sizing: border-box;
+    font-size: 25px;
+    font-family: "Inter", sans-serif;
+    font-weight: 800;
+    transition: background 0.3s ease, color 0.3s ease; /* Add transitions for smooth effect */
+  }
+  
+  .main-content {
+    box-sizing: border-box;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+
+  .main-content p{
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+  }
+  
+  .cta-buttons {
+    box-sizing: border-box;
+    margin-top: 20px;
+  }
+  
+  .primary-button:hover,
+  .secondary-button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .primary-button,
+.secondary-button {
+    width: 200px;
+  box-sizing: border-box;
+  transition: box-shadow 0.3s ease;
+  padding: 15px 30px; /* Increased size by 1.5 times */
+  margin: 0 10px;
+  font-size: 18px; /* Increased font size */
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px; /* Adjusted border-radius for a smoother look */
+}
+
+.primary-button {
+  background-color: #f8f8f8; /* Apple website button color */
+  color: #000; /* Apple website button text color */
+  border: 1px solid #ccc; /* Border for a defined look */
+}
+
+.secondary-button {
+  background-color: #0070c9; /* Apple website secondary button color */
+  color: #fff; /* Apple website secondary button text color */
+}
+  
+  .footer {
+    height: 50px;
+    box-sizing: border-box;
+    width: 100vw;
+    margin-top: auto;
+    text-align: center;
+    background-color: #1b1a1a;
+  }
+  
