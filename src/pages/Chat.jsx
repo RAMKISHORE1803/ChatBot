@@ -22,8 +22,6 @@ const Chat = () => {
   const [prevChats, setPrevChats] = useState([]);
   let response = "";
   let user = null;
-  //let prevChats = [];
-
   {
     /********************************************************************************************************8*/
   }
@@ -33,7 +31,7 @@ const Chat = () => {
         user = auth.currentUser;
         if (user) {
           console.log(user, "nice");
-          setLoading(false); // Set loading to false if user exists
+          setLoading(false);
         } else {
           navigate("/login");
           console.log("Not logged in");
@@ -57,11 +55,6 @@ const Chat = () => {
       getChatHistory();
     }, 2000);
   }, [loading]);
-
-  // useEffect(() => {
-  //   console.log("control reached useeffect hook");
-  //   console.log("chat history", chatHistory);
-  // }, [chatHistory]);
   {
     /********************************************************************************************************8*/
   }
@@ -179,21 +172,13 @@ const Chat = () => {
       const snapshot = await getDocs(chatsCollectionRef);
       documentIds = snapshot.docs.map((doc) => doc.id);
 
-      //console.log(documentIds);
       setPrevChats(documentIds);
     } catch (error) {
       console.log(error);
     } finally {
       console.log(prevChats);
-      //return prevChats[0];
     }
-    //return documentIds;
   };
-
-  // const displayChatHistory = () => {
-  //   const documentIds = getChatHistory();
-  //   return documentIds; // You can now use the documentIds in your code as needed
-  // };
   {
     /********************************************************************************************************8*/
   }
