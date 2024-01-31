@@ -9,9 +9,9 @@ export const containerStyle = {
 
 export const rightDiv = {
   backgroundColor: "black",
-  paddingLeft: "40px",
+  paddingLeft: "0px",
   boxSizing: "border-box",
-  width: "50vw",
+  width: "40vw",
   height: "100vh",
   display: "flex",
   flexDirection: "column",
@@ -21,11 +21,11 @@ export const rightDiv = {
   scrollbarWidth: "thin", // For Firefox
   scrollbarColor: "red black", // For Firefox
 
-  "&::-webkit-scrollbar": {
+  "&::WebkitScrollbar": {
     width: "12px", // Adjust the width as needed
   },
 
-  "&::-webkit-scrollbar-thumb": {
+  "&::WebkitScrollbarThumb": {
     backgroundColor: "blue", // Adjust the color as needed
     borderRadius: "6px", // To round the corners of the thumb
   },
@@ -41,6 +41,14 @@ export const leftDiv = {
   maxHeight: "100vh",
   overflow: "scroll",
   padding: "20px",
+  "&::WebkitScrollbar": {
+    width: "12px", // Adjust the width as needed
+  },
+
+  "&::WebkitScrollbarThumb": {
+    backgroundColor: "blue", // Adjust the color as needed
+    borderRadius: "6px", // To round the corners of the thumb
+  },
 };
 
 export const inputStyle = {

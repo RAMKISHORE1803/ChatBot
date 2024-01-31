@@ -1,36 +1,83 @@
-import React, { useState } from "react";
-import "./Home.css";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./Home.css";
+
+import { auth } from "../config/firebase.js";
+import { signOut } from "firebase/auth";
 
 const Home = () => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loggedin, setLoggedin] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const user = await auth.currentUser;
+        if (user) {
+          console.log(user, "nice");
+          setLoggedin(true);
+        } else {
+          console.log("Not logged in");
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error checking user:", error);
+      }
+    };
+
+    setTimeout(() => {
+      checkUser();
+    }, 2000);
+  }, []);
 
   const navigateLogin = () => {
     navigate("/login");
   };
 
-  const navigateRegister = () => {
-    navigate("/register");
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
-  const handleTitleHover = () => {
-    setIsHovered(true);
-  };
+  const renderButtons = () => {
+    if (loading) {
+      return <div className="loading-spinner"></div>;
+    }
 
-  const handleTitleLeave = () => {
-    setIsHovered(false);
+    if (loggedin) {
+      return (
+        <Link to="/chat">
+          <button onClick={navigateLogin} className="primary-button">
+            Chat Now
+          </button>
+          <button onClick={logout} className="secondary-button">
+            Logout
+          </button>
+        </Link>
+      );
+    }
+
+    return (
+      <>
+        <Link to="/login">
+          <button className="primary-button">Login</button>
+        </Link>
+        <Link to="/register">
+          <button className="secondary-button">Signup</button>
+        </Link>
+      </>
+    );
   };
 
   return (
     <div className="landing-page">
       <div className="center">
         <div className="header">
-          <h1
-            className={isHovered ? "title hovered" : "title"}
-            onMouseEnter={handleTitleHover}
-            onMouseLeave={handleTitleLeave}
-          >
+          <h1 className={loggedin ? "title hovered" : "title"}>
             Chatbot Application
           </h1>
           <p>Your Personal Assistant</p>
@@ -38,16 +85,7 @@ const Home = () => {
 
         <div className="main-content">
           <p>Welcome to our Chatbot Application! Get started now.</p>
-
-          <div className="cta-buttons">
-            <button onClick={navigateLogin} className="primary-button">
-              <Link to="/login" />
-              Login
-            </button>
-            <button onClick={navigateRegister} className="secondary-button">
-              Signup
-            </button>
-          </div>
+          <div className="cta-buttons">{renderButtons()}</div>
         </div>
       </div>
 
