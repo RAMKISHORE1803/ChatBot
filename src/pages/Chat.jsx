@@ -4,22 +4,33 @@ import { API_KEY } from "../../config";
 import "./Chat.css";
 import { Flex, Text, Card, Avatar, Box } from "@radix-ui/themes";
 import { useNavigate } from "react-router-dom";
+import deleteicon from "../assets/delete-icon.svg";
 
 import { auth } from "../config/firebase.js";
 import { signOut } from "firebase/auth";
 import { db } from "../config/firebase.js";
-import { collection, setDoc, doc, getDocs, getDoc } from "firebase/firestore";
+// prettier-ignore
+import {collection,setDoc,doc,getDocs,getDoc,deleteDoc} from "firebase/firestore";
 
 const Chat = () => {
+  let date = new Date();
+  let time = date.toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
+  });
   const navigate = useNavigate();
   const promptRef = useRef(null);
-  const [content, setContent] = useState("");
-  const [chatHistory, setChatHistory] = useState([]);
+  const [content, setContent] = useState(""); // for rendering API's response in the text field below input field.
+  const [chatHistory, setChatHistory] = useState([]); // for rendering current messages and maintain context to API.
   const [gettingResponse, setGettingResponse] = useState(false);
   const [isSafe, setIsSafe] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loggedin, setLoggedin] = useState(false);
-  const [prevChats, setPrevChats] = useState([]);
+  const [prevChats, setPrevChats] = useState([]); // for rendering the list of previous conversations of the user.
+  const [clickedConversation, setClickedConversation] = useState(time);
+
   let response = "";
   let user = null;
   {
@@ -68,6 +79,16 @@ const Chat = () => {
     /********************************************************************************************************8*/
   }
   const handleClick = async () => {
+    ///////////////////////////////////////////////////
+    const userId = auth.currentUser.uid;
+    const usersCollectionRef = collection(db, "users");
+    const documentId = userId;
+    const userDocumentRef = doc(usersCollectionRef, documentId);
+    const chatsCollectionRef = collection(userDocumentRef, "chats");
+
+    const chatsDocumentRef = doc(chatsCollectionRef, `chats: ${time}`);
+
+    ///////////////////////////////////////////////////
     console.log("control reached handleClick");
     setGettingResponse(!gettingResponse);
     const prompt = promptRef.current.value;
@@ -128,8 +149,8 @@ const Chat = () => {
   const newChat = async () => {
     if (auth && chatHistory) {
       const userId = auth.currentUser.uid;
-      const date = new Date();
-      const time = date.toLocaleString("en-US", {
+      date = new Date();
+      time = date.toLocaleString("en-US", {
         hour: "numeric",
         minute: "numeric",
         second: "numeric",
@@ -176,16 +197,14 @@ const Chat = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      console.log(prevChats);
+      //console.log(prevChats);
     }
   };
   {
     /********************************************************************************************************8*/
   }
   const loadChat = async (item) => {
-    console.log("control reached loadChat");
     const reqChatDocumentId = item;
-    console.log(reqChatDocumentId);
     try {
       const userId = auth.currentUser.uid;
       const usersCollectionRef = collection(db, "users");
@@ -208,6 +227,26 @@ const Chat = () => {
   {
     /********************************************************************************************************8*/
   }
+  const deleteChat = async (item) => {
+    // console.log("control reached delete chat");
+    // console.log(item);
+    const reqChatDocumentId = item;
+    try {
+      const userId = auth.currentUser.uid;
+      const usersCollectionRef = collection(db, "users");
+      const documentId = userId;
+      const userDocumentRef = doc(usersCollectionRef, documentId);
+      const chatsCollectionRef = collection(userDocumentRef, "chats");
+      const reqDocumentRef = doc(chatsCollectionRef, reqChatDocumentId);
+      await deleteDoc(reqDocumentRef);
+      getChatHistory();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  {
+    /********************************************************************************************************8*/
+  }
   const logOut = async () => {
     user = auth.currentUser;
     if (user) {
@@ -223,6 +262,7 @@ const Chat = () => {
       alert("no user is logged in");
     }
   };
+
   const getCurrentUser = () => {
     user = auth.currentUser;
     //console.log(user);
@@ -328,7 +368,7 @@ const Chat = () => {
             <div
               style={{
                 backgroundColor: "grey",
-                width: "10vw",
+                width: "11.9vw",
                 height: "100vh",
                 boxSizing: "border-box",
                 maxHeight: "100vh",
@@ -338,9 +378,13 @@ const Chat = () => {
               <div>{getCurrentUser()}</div>
               <div>
                 {prevChats.map((item, index) => (
-                  <button onClick={() => loadChat(item)} key={index}>
-                    {item}
-                  </button>
+                  <div style={{ display: "flex" }} key={index}>
+                    <button onClick={() => loadChat(item)}>{item}</button>
+                    <br></br>
+                    <button onClick={() => deleteChat(item)}>
+                      <img src={deleteicon} style={{ cursor: "pointer" }}></img>
+                    </button>
+                  </div>
                 ))}
               </div>
             </div>
